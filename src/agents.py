@@ -12,7 +12,7 @@ from models import DNN, UserMovieEmbedding, StateRepresentation
 
 
 class DdqnAgent(object):
-    def __init__(self, env, users_num, items_num, state_size, action_size, epsilon=0.8, epsilon_min=0.01, epsilon_decay=0.999, embedding_dim=100, hidden_dim=256, learning_rate=0.001, gamma = 0.8, buffer_size=50000,batch_size=64):
+    def __init__(self, env, users_num, items_num, state_size, action_size, epsilon=0.8, epsilon_min=0.01, epsilon_decay=0.999, embedding_dim=100, hidden_dim=256, learning_rate=0.001, gamma = 0.8, buffer_size=5000,batch_size=64):
         self.env = env
 
         self.users_num = users_num
@@ -185,7 +185,7 @@ class DdqnAgent(object):
                 plt.plot(episode_precision_history)
                 plt.savefig(os.path.join(self.save_model_weight_dir, f'images/training_precision_%_top_10.png'))
 
-            if (episode+1)%1000 == 0 or episode == max_episode_num-1:
+            if (episode+1)%100 == 0 or episode == max_episode_num-1:
                 self.save_model(os.path.join(self.save_model_weight_dir, f'q_network_{episode+1}_fixed.h5'),
                           os.path.join(self.save_model_weight_dir, f'target_network_{episode+1}_fixed.h5'))
         # Store the training metrics in pickle file
@@ -204,7 +204,7 @@ class DdqnAgent(object):
 
 
 class DqnAgent(object):
-    def __init__(self, env, users_num, items_num, state_size, action_size, epsilon=0.8, epsilon_min=0.01, epsilon_decay=0.999, embedding_dim=100, hidden_dim=256, learning_rate=0.001, gamma = 0.8, buffer_size=50000,batch_size=64):
+    def __init__(self, env, users_num, items_num, state_size, action_size, epsilon=0.8, epsilon_min=0.01, epsilon_decay=0.999, embedding_dim=100, hidden_dim=256, learning_rate=0.001, gamma = 0.8, buffer_size=5000,batch_size=64):
         self.env = env
 
         self.users_num = users_num
@@ -373,7 +373,7 @@ class DqnAgent(object):
                 plt.plot(episode_precision_history)
                 plt.savefig(os.path.join(self.save_model_weight_dir, f'images/training_precision_%_top_10.png'))
 
-            if (episode+1)%1000 == 0 or episode == max_episode_num-1:
+            if (episode+1)%100 == 0 or episode == max_episode_num-1:
                 self.save_model(os.path.join(self.save_model_weight_dir, f'q_network_{episode+1}_fixed.h5'),
                               os.path.join(self.save_model_weight_dir, f'target_network_{episode+1}_fixed.h5'))
         # Store the training metrics in pickle file

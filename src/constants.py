@@ -14,7 +14,7 @@ MODEL_PATH = {
     "TAR_NET": ROOT_DIR +"/rl_model/dqn/target_network_12_fixed.h5"
     },
     "DDQN": {
-    "Q_NET": ROOT_DIR +"/rl_model/dqn/q_network_12_fixed.h5",
-    "TAR_NET": ROOT_DIR +"/rl_model/dqn/target_network_12_fixed.h5"
+    "Q_NET": ROOT_DIR +"/rl_model/ddqn/q_network_12_fixed.h5",
+    "TAR_NET": ROOT_DIR +"/rl_model/ddqn/target_network_12_fixed.h5"
     } 
 }
