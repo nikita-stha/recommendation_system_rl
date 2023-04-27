@@ -124,10 +124,10 @@ class DdqnAgent(object):
         # Increment the update counter
         self.update_counter += 1
         return loss
-
+        
     def train(self, env, max_episode_num, load_model=False):
         if load_model:
-            self.load_model(os.path.join(self.save_model_weight_dir,"q_network_dqn.h5"), os.path.join(self.save_model_weight_dir, "target_network_dqn.h5"))
+            self.load_model(os.path.join(self.save_model_weight_dir,"q_network_ddqn.h5"), os.path.join(self.save_model_weight_dir, "target_network_ddqn.h5"))
             print('Completely loaded weights of the networks!')
         episode_precision_history = []
         episode_rewards = []
@@ -189,7 +189,7 @@ class DdqnAgent(object):
                 self.save_model(os.path.join(self.save_model_weight_dir, f'q_network_{episode+1}_fixed.h5'),
                           os.path.join(self.save_model_weight_dir, f'target_network_{episode+1}_fixed.h5'))
         # Store the training metrics in pickle file
-        with open(os.path.join(self.save_model_weight_dir,'dqn_agent_train_op.pickle'), 'wb') as f:
+        with open(os.path.join(self.save_model_weight_dir,'ddqn_agent_train_op.pickle'), 'wb') as f:
             data = (episode_precision_history, episode_rewards, episode_loss)
             pickle.dump(data, f) 
 

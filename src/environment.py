@@ -1,7 +1,5 @@
+import random
 import numpy as np
-
-
-from constants import SEED_VALUE
 
 
 class RecEnv():
@@ -19,12 +17,11 @@ class RecEnv():
         self.items = [data[0] for data in self.users_dict[self.user][:self.state_size]]
         self.done = False
         self.recommended_items = set(self.items)
-        self.done_count = 3000
-        self.rng = np.random.default_rng(seed=SEED_VALUE)
+        self.done_count = 450
         
     def _generate_available_users(self):
         available_users = []
-        for user_id, history_lens in zip(self.users_dict.keys(), self.users_history_lens.values()):
+        for user_id, history_lens in zip(self.users_dict.keys(), self.users_history_lens):
             if history_lens > self.state_size:
                 available_users.append(user_id)
         return available_users
@@ -37,7 +34,7 @@ class RecEnv():
         self.recommended_items = set(self.items)
         return self.user, self.items, self.done
     
-    def step(self, action):
+    def step(self, action):                
         recommended_item = action + 1
 
         # Calculate diversity bonus
@@ -61,13 +58,14 @@ class RecEnv():
         # Update the state
         if recommended_item in self.user_items.keys() and recommended_item not in self.recommended_items:
             self.items = self.items[1:] + [recommended_item]
+        else:
+            random.shuffle(self.items)
 
         self.recommended_items.add(recommended_item)
 
         # Check if the episode is done
-        if len(self.recommended_items) > self.done_count or len(self.recommended_items) >= self.users_history_lens[self.user - 1 - 1]:
-            if len(self.recommended_items) >= self.users_history_lens[self.user]:
-                self.done = True
+        if len(self.recommended_items) >= len(self.users_history_lens[self.user]) or len(self.recommended_items) > self.done_count:
+            self.done = True
 
         return self.items, reward, self.done, self.recommended_items
 

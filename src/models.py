@@ -2,6 +2,7 @@ import tensorflow as tf
 
 
 # DNN for our DQN/DDQN agent
+
 class DNN(tf.keras.Model):
     def __init__(self, embedding_dim, hidden_dim, output_dim):
         super(DNN, self).__init__()
@@ -12,7 +13,7 @@ class DNN(tf.keras.Model):
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Dense(hidden_dim, activation='relu'),
             tf.keras.layers.BatchNormalization(),
-            tf.keras.layers.Dense(hidden_dim, activation='relu'),  
+            tf.keras.layers.Dense(hidden_dim, activation='relu'),
             tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Dense(hidden_dim, activation='relu'),
             tf.keras.layers.BatchNormalization(),
@@ -23,7 +24,7 @@ class DNN(tf.keras.Model):
         x = self.input_layer(x)
         x = self.flatten_layer(x)
         return self.fc_layers(x)
-
+    
 
 # Embedding layers for representing user_movie iteraction
 class UserMovieEmbedding(tf.keras.Model):
