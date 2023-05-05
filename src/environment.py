@@ -64,9 +64,9 @@ class RecEnv():
         self.recommended_items.add(recommended_item)
 
         # Check if the episode is done
-        if len(self.recommended_items) >= len(self.users_history_lens[self.user]) or len(self.recommended_items) > self.done_count:
+        if len(self.recommended_items) > self.done_count or len(self.recommended_items) >= len(self.users_history_lens[self.user]):
             self.done = True
-
+        
         return self.items, reward, self.done, self.recommended_items
 
     def get_items_names(self, items_ids):

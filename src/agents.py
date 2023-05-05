@@ -172,7 +172,7 @@ class DdqnAgent(object):
 
                 if reward > 0:
                     correct_count += 1
-                print(f'recommended items : {len(env.recommended_items)},  epsilon : {self.epsilon:0.3f}, reward : {reward:+}', end='\r')
+                # print(f'recommended items : {len(env.recommended_items)},  epsilon : {self.epsilon:0.3f}, reward : {reward:+}', end='\r')
 
                 if done:
                     precision = int(correct_count/steps * 100)
@@ -188,10 +188,10 @@ class DdqnAgent(object):
             if (episode+1)%100 == 0 or episode == max_episode_num-1:
                 self.save_model(os.path.join(self.save_model_weight_dir, f'q_network_{episode+1}_fixed.h5'),
                           os.path.join(self.save_model_weight_dir, f'target_network_{episode+1}_fixed.h5'))
-        # Store the training metrics in pickle file
-        with open(os.path.join(self.save_model_weight_dir,'ddqn_agent_train_op.pickle'), 'wb') as f:
-            data = (episode_precision_history, episode_rewards, episode_loss)
-            pickle.dump(data, f) 
+            # Store the training metrics in pickle file
+            with open(os.path.join(self.save_model_weight_dir,'ddqn_agent_train_op.pickle'), 'wb') as f:
+                data = (episode_precision_history, episode_rewards, episode_loss)
+                pickle.dump(data, f) 
 
 
     def save_model(self, q_network_path, target_network_path):
@@ -201,7 +201,21 @@ class DdqnAgent(object):
     def load_model(self, q_network_path, target_network_path):
         self.q_network.load_weights(q_network_path)
         self.target_network.load_weights(target_network_path)
+    
+    def recommend_item(self, user_id, item_ids):
+        # Find embeddings of user and items
+        user_eb = self.embedding_network.get_layer('user_embedding')(np.array(user_id))
+        items_eb = self.embedding_network.get_layer('movie_embedding')(np.array(item_ids))
+        
+        # Represent State
+        state = self.srm_ave([np.expand_dims(user_eb, axis=0), np.expand_dims(items_eb, axis=0)])
+        
+        # Get most profitable action
+        action = self.q_network(state)
 
+        recommended_item = np.argmax(action)
+        return recommended_item
+    
 
 class DqnAgent(object):
     def __init__(self, env, users_num, items_num, state_size, action_size, epsilon=0.8, epsilon_min=0.01, epsilon_decay=0.999, embedding_dim=100, hidden_dim=256, learning_rate=0.001, gamma = 0.8, buffer_size=5000,batch_size=64):
@@ -360,7 +374,7 @@ class DqnAgent(object):
 
                 if reward > 0:
                     correct_count += 1
-                print(f'recommended items : {len(env.recommended_items)},  epsilon : {self.epsilon:0.3f}, reward : {reward:+}', end='\r')
+                # print(f'recommended items : {len(env.recommended_items)},  epsilon : {self.epsilon:0.3f}, reward : {reward:+}', end='\r')
 
                 if done:
                     precision = int(correct_count/steps * 100)
@@ -389,3 +403,17 @@ class DqnAgent(object):
     def load_model(self, q_network_path, target_network_path):
         self.q_network.load_weights(q_network_path)
         self.target_network.load_weights(target_network_path)
+    
+    def recommend_item(self, user_id, item_ids):
+        # Find embeddings of user and items
+        user_eb = self.embedding_network.get_layer('user_embedding')(np.array(user_id))
+        items_eb = self.embedding_network.get_layer('movie_embedding')(np.array(item_ids))
+        
+        # Represent State
+        state = self.srm_ave([np.expand_dims(user_eb, axis=0), np.expand_dims(items_eb, axis=0)])
+        
+        # Get most profitable action
+        action = self.q_network(state)
+
+        recommended_item = np.argmax(action)
+        return recommended_item

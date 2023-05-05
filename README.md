@@ -12,6 +12,19 @@
 # To train the models
 In this project, we have used DQN and DDQN agents to train our recommendation system
 - To train DQN use command below:
-`python train.py DQN`
+`python src/train.py DQN`
 - To train DDQN use command below:
-`python train.py DDQN`
+`python src/train.py DDQN`
+
+# To evaluate the models
+In this project, we have used DQN and DDQN agents to train our recommendation system
+- To evaluate DQN use command below:
+`python src/evaluate.py DQN`
+- To evaluate DDQN use command below:
+`python src/evaluate.py DDQN`
+
+# To generate recommendation for a single user
+- To generate recommendation using DQN use command below:
+`python src/recommend.py DQN [user_id]`
+- To generate recommendation using DDQN use command below:
+`python src/recommend.py DDQN [user_id]`
